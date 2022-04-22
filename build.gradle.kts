@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
     implementation("space.kscience:kmath-complex:0.2.1")
+    implementation("org.jetbrains.lets-plot:lets-plot-kotlin:3.2.0")
+    implementation("org.jetbrains.lets-plot:lets-plot-image-export:2.3.0")
     testImplementation(kotlin("test"))
 }
 
