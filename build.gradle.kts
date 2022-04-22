@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    implementation("space.kscience:kmath-complex:0.2.1")
     testImplementation(kotlin("test"))
 }
 
