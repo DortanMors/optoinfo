@@ -1,5 +1,8 @@
 package lab1
 
+import jetbrains.letsPlot.geom.geomPoint
+import jetbrains.letsPlot.label.ggtitle
+import jetbrains.letsPlot.letsPlot
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.complex.ComplexField.times
@@ -23,3 +26,15 @@ fun range(left: Double, right: Double, n: Int) = ((right - left) / n).let { h ->
         left + k * h
     }
 }
+
+fun plot(data: Map<*, *>, title: String, color: String = "dark-green", size: Double = 1.0) =
+    letsPlot(data) +
+    geomPoint(color = color, size = size) {
+        data.keys.run {
+            x = first()
+            y = last()
+        }
+    } +
+    ggtitle(title)
+
+operator fun ((Double) -> Complex).invoke(args: List<Double>) = args.map { x -> this.invoke(x) }
