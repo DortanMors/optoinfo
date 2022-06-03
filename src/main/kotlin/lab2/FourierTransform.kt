@@ -113,7 +113,7 @@ private fun Array<Complex>.halfSwap(): Array<Complex> {
 }
 
 private fun Array<Complex>.inflateZeros(m: Int): Array<Complex> {
-    require(m > size) { "Can`t inflate to lesser array" }
+    require(m >= size) { "Can`t inflate to lesser array" }
     val result = Array(m) { ComplexField.zero }
     val gain = (m-size) / 2
     for (i in indices) {
@@ -123,7 +123,7 @@ private fun Array<Complex>.inflateZeros(m: Int): Array<Complex> {
 }
 
 private fun Array<Complex>.clipZeros(n: Int): Array<Complex> {
-    require(size > n) { "Can`t cut to bigger array" }
+    require(size >= n) { "Can`t cut to bigger array" }
     val result = Array(n) { ComplexField.zero }
     val gain = (size - n) / 2
     for (i in result.indices) {
