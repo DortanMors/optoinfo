@@ -27,7 +27,12 @@ fun main() {
     val x4Range = DoubleRange(-c, c, n, X_LABEL)
     val rectFourierArea = SampledArea(gaussF.rectFourierTransform(ksi4Range, x4Range), ksi4Range, ksi4Range.step)
     plotToFile(rectFourierArea, "$FKSI_LABEL($KSI_LABEL)", "rect fourier gauss beam")
-    
+// Task 5
+
+// Task 6
+    val area6 = SampledArea(inputF.invoke(args), xRange, xRange.step)
+    val fourierArea6 = area6.scaledFiniteFourierTransform(m)
+    plotToFile(fourierArea6, "$FKSI_LABEL[exp(-|$X_LABEL|)]", "fourier gauss beam")
 }
 
 fun plotToFile(area: SampledArea, fLabel: String, title: String) {
