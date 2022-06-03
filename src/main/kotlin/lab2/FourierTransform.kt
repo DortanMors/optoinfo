@@ -1,14 +1,14 @@
 package lab2
 
 import jetbrains.datalore.base.math.ipow
-import lab1.DoubleRange
-import lab1.KSI_LABEL
+import lab1.*
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.complex.ComplexField.minus
 import space.kscience.kmath.complex.ComplexField.plus
 import space.kscience.kmath.complex.ComplexField.times
 import space.kscience.kmath.complex.conjugate
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.log2
 import kotlin.math.sin
@@ -34,6 +34,13 @@ data class SampledArea (val numbers: Array<Complex>, val range: DoubleRange, val
     }
 }
 
+val fourierKor: (Double, Double) -> Complex = { ksi, x -> ComplexField.exp(-2 * PI * ComplexField.i * ksi * x) }
+
+fun ((Double) -> Complex).rectFourierTransform(ksiRange: DoubleRange, xRange: DoubleRange): Array<Complex> =
+    integralTransform(ksiRange, xRange, fourierKor).toTypedArray()
+
+
+
 fun SampledArea.scaledFiniteFourierTransform(m: Int): SampledArea {
     require(numbers.size % 2 == 0) { "Can`t inflate zeros" }
     val scaledSamples = SampledArea(numbers.inflateZeros(m), range, delta)
@@ -56,21 +63,22 @@ fun SampledArea.finiteFourierTransform(): Array<Complex> {
 fun fastFourierTransform(x: Array<Complex>): Array<Complex> {
     val n = x.size
     if (n == 1) return arrayOf(x[0])
-    val even = Array(n / 2) { index ->
-        x[2 * index]
+    // compute FFT of even terms
+    val even = Array(n/2) {
+        x[2*it]
     }
     val evenFFT = fastFourierTransform(even)
-    for (k in 0 until n / 2) {
-        even[k] = x[2 * k + 1]
+    val odd = even
+    for (k in 0 until n/2) {
+        odd[k] = x[2*k + 1]
     }
-    val oddFFT = fastFourierTransform(even)
-    val y = Array(n) { index ->
-        val kth = -2 * index * Math.PI / n
+    val oddFFT = fastFourierTransform(odd)
+    val y = Array<Complex>(n) { ComplexField.zero }
+    for (k in 0 until n/2) {
+        val kth = -2 * k * Math.PI / n
         val wk = Complex(cos(kth), sin(kth))
-        if (index < n / 2)
-            evenFFT[index] + (wk * oddFFT[index])
-        else
-            evenFFT[index] - (wk * oddFFT[index])
+        y[k]       = evenFFT[k].plus (wk.times(oddFFT[k]))
+        y[k + n/2] = evenFFT[k].minus(wk.times(oddFFT[k]))
     }
     return y
 }
@@ -87,7 +95,7 @@ fun inverseFFT(x: Array<Complex>): Array<Complex> {
         y[i] = y[i].conjugate
     }
     for (i in y.indices) {
-        y[i] = y[i] * (1.0 / n) // TODO scale
+        y[i] = y[i].scale(1.0 / n)
     }
     return y
 }
