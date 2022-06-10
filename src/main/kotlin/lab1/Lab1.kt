@@ -1,6 +1,7 @@
 package lab1
 
 import jetbrains.letsPlot.export.ggsave
+import lab2.invoke
 import space.kscience.kmath.complex.ComplexField.exp
 import space.kscience.kmath.complex.ComplexField.i
 import space.kscience.kmath.complex.ComplexField.times
@@ -16,6 +17,7 @@ var n = 1000
 var m = 1000
 
 const val X_LABEL = "x"
+const val Y_LABEL = "y"
 const val KSI_LABEL = "ξ"
 const val FX_LABEL = "f($X_LABEL)"
 const val FKSI_LABEL = "F($KSI_LABEL)"
