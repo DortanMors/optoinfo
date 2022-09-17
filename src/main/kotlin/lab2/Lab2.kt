@@ -57,20 +57,20 @@ fun main() {
     task8(128, 512)
     task8(128, 2048)
 //// Task 9.2
-//    run {
-//        val xs = DoubleRange(-c, c, n, X_LABEL)
-//        val ys = DoubleRange(-c, c, n, Y_LABEL)
-//        val gaussValues = gauss2F(xs, ys)
-//        plotHeat(gaussValues, "gauss 2 values") //TODO
+    run {
+        val xs = DoubleRange(-c, c, n, X_LABEL)
+        val ys = DoubleRange(-c, c, n, Y_LABEL)
+        val gaussValues = gauss2F(xs, ys)
+        plotHeat(gaussValues, "gauss 2 values") //TODO
 //// Task 9.3
-//        val gaussTransform = fastFourierTransform(gaussValues)
-//        plotHeat(gaussTransform, "gauss 2 transform") //TODO
+        val gaussTransform = fastFourierTransform(gaussValues)
+        plotHeat(gaussTransform, "gauss 2 transform") //TODO
 //// Task 9.6
-//        val variantValues = inputF2(xs, ys)
-//        plotHeat(variantValues, "variant 2 values")
-//        val variantTransformed = fastFourierTransform(variantValues)
-//        plotHeat(variantValues, "variant 2 transform")
-//    }
+        val variantValues = inputF2(xs, ys)
+        plotHeat(variantValues, "variant 2 values")
+        val variantTransformed = fastFourierTransform(variantValues)
+        plotHeat(variantValues, "variant 2 transform")
+    }
 }
 
 private operator fun Number.div(complex: Complex): Complex = times(complex.pow(-1.0))
@@ -196,7 +196,9 @@ fun threePlots(
 }
 
 fun plotHeat(matrix: Array<Array<Complex>>, title: String) {
-    println(title + matrix)
+    println(title)
+    println("Absolutes:" + matrix.map { it.absolutes() })
+    println("Args" + matrix.map { it.args() })
 }
 
 val String.png: String
