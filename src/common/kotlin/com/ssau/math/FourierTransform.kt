@@ -1,7 +1,7 @@
-package lab2
+package com.ssau.math
 
+import com.ssau.plot.Constants.KSI_LABEL
 import jetbrains.datalore.base.math.ipow
-import lab1.*
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.complex.ComplexField.exp
@@ -14,10 +14,6 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.log2
 import kotlin.math.sin
-
-operator fun ((Double) -> Complex).invoke(x: Array<Double>) = Array(x.size) { index -> invoke(x[index]) }
-operator fun ((Double) -> Complex).invoke(x: List<Double>) = Array(x.size) { index -> invoke(x[index]) }
-
 
 data class SampledArea (val numbers: Array<Complex>, val range: DoubleRange) {
     override fun equals(other: Any?): Boolean {
@@ -38,7 +34,7 @@ data class SampledArea (val numbers: Array<Complex>, val range: DoubleRange) {
     }
 }
 
-val fourierKor: (Double, Double) -> Complex = { ksi, x -> ComplexField.exp(-2 * PI * ComplexField.i * ksi * x) }
+val fourierKor: (Double, Double) -> Complex = { ksi, x -> exp(-2 * PI * i * ksi * x) }
 
 fun ((Double) -> Complex).rectFourierTransform(ksiRange: DoubleRange, xRange: DoubleRange): Array<Complex> =
     integralTransform(ksiRange, xRange, fourierKor).toTypedArray()
@@ -98,11 +94,10 @@ fun fastFourierTransform(x: Array<Complex>): Array<Complex> {
         x[2*it]
     }
     val evenFFT = fastFourierTransform(even)
-    val odd = even
     for (k in 0 until n/2) {
-        odd[k] = x[2*k + 1]
+        even[k] = x[2 * k + 1]
     }
-    val oddFFT = fastFourierTransform(odd)
+    val oddFFT = fastFourierTransform(even)
     val y = Array(n) { ComplexField.zero }
     for (k in 0 until n/2) {
         val kth = -2 * k * Math.PI / n

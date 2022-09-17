@@ -1,10 +1,14 @@
 package lab2
 
-import jetbrains.datalore.base.values.Color
-import jetbrains.letsPlot.export.ggsave
-import jetbrains.letsPlot.geom.geomLine
-import jetbrains.letsPlot.label.ggtitle
-import jetbrains.letsPlot.letsPlot
+import com.ssau.math.*
+import com.ssau.plot.Constants.F_KSI_LABEL
+import com.ssau.plot.Constants.KSI_LABEL
+import com.ssau.plot.Constants.X_LABEL
+import com.ssau.plot.Constants.Y_LABEL
+import com.ssau.plot.plotHeat
+import com.ssau.plot.plotOnRange
+import com.ssau.plot.threePlots
+import com.ssau.plot.twoPlots
 import lab1.*
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField.i
@@ -27,24 +31,24 @@ fun main() {
     val n = 100
     val c = 5.0
     val xRange = DoubleRange(-c, c, n, X_LABEL)
-    val area = SampledArea(gaussF(xRange), xRange)
+    val area = SampledArea(gaussF.invoke(xRange), xRange)
     plotToFile(area, "exp(-($X_LABEL^2))", "gauss beam (Task2)")
 // Task 3
     val m = 1024
     val fourierArea = area.scaledFiniteFourierTransform(m)
-    plotToFile(fourierArea, "$FKSI_LABEL[exp(-($X_LABEL^2))]", "fourier gauss beam (Task3)")
+    plotToFile(fourierArea, "$F_KSI_LABEL[exp(-($X_LABEL^2))]", "fourier gauss beam (Task3)")
 // Task 4
     val b = fourierArea.range.right
     val ksi4Range = DoubleRange(-b, b, n, KSI_LABEL)
     val x4Range = DoubleRange(-c, c, n, X_LABEL)
     val rectFourierArea = SampledArea(gaussF.rectFourierTransform(ksi4Range, x4Range), ksi4Range)
-    plotToFile(rectFourierArea, "$FKSI_LABEL($KSI_LABEL)", "rect fourier gauss beam (Task4)")
+    plotToFile(rectFourierArea, "$F_KSI_LABEL($KSI_LABEL)", "rect fourier gauss beam (Task4)")
 // Task 5
     task5(ksi4Range, fourierArea, rectFourierArea)
 // Task 6
     val area6 = SampledArea(inputF(xRange), xRange)
     val fourierArea6 = area6.scaledFiniteFourierTransform(m)
-    plotToFile(fourierArea6, "$FKSI_LABEL[exp(-|$X_LABEL|)]", "fourier gauss beam (Task6)")
+    plotToFile(fourierArea6, "$F_KSI_LABEL[exp(-|$X_LABEL|)]", "fourier gauss beam (Task6)")
 //// Task 7 Analytics
     val analSolution: (Double) -> Complex =
         { ksi -> 2 / ((- i + 2 * ksi * PI) * (i + 2 * ksi * PI)) }
@@ -80,7 +84,7 @@ fun task8(n: Int, m: Int) {
     val xRange = DoubleRange(-c, c, n, X_LABEL)
     val area = SampledArea(inputF.invoke(xRange.asArray()), xRange)
     val fourierArea = area.scaledFiniteFourierTransform(m)
-    plotToFile(fourierArea, "$FKSI_LABEL[exp(-|$X_LABEL|)]", "fourier gauss beam (n=$n, m=$m)")
+    plotToFile(fourierArea, "$F_KSI_LABEL[exp(-|$X_LABEL|)]", "fourier gauss beam (n=$n, m=$m)")
 }
 
 fun plotToFile(area: SampledArea, fLabel: String, title: String) {
@@ -128,78 +132,3 @@ fun task7(range: DoubleRange, firstArea: SampledArea, secondArea: SampledArea, t
         thirdList.args(), "Args F3($KSI_LABEL)"
     )
 }
-
-fun twoPlots(title: String, range: DoubleRange, firstArea: List<Double>, secondArea: List<Double>, firstAreaTitle: String, secondAreaTitle: String) {
-    val data = mutableMapOf<String, Any>(
-        range.label to range,
-        firstAreaTitle to firstArea,
-        secondAreaTitle to secondArea
-    )
-    ggsave(
-        letsPlot(data) +
-                geomLine(color = Color.GREEN, size = 5.0) {
-                    data.keys.run {
-                        x = range.label
-                        y = firstAreaTitle
-                    }
-                } +
-                geomLine(color = Color.RED, size = 1.0) {
-                    data.keys.run {
-                        x = range.label
-                        y = secondAreaTitle
-                    }
-                } +
-                ggtitle(title),
-        title.png
-    )
-}
-
-fun threePlots(
-    range: DoubleRange,
-    title: String,
-    first: List<Double>,
-    firstTitle: String,
-    second: List<Double>,
-    secondTitle: String,
-    third: List<Double>,
-    thirdTitle: String
-) {
-    val data = mutableMapOf<String, Any>(
-        range.label to range,
-        firstTitle to first,
-        secondTitle to second,
-        thirdTitle to third
-    )
-    ggsave(
-        letsPlot(data) +
-                geomLine(color = Color.GREEN, size = 6.0) {
-                    data.keys.run {
-                        x = range.label
-                        y = firstTitle
-                    }
-                } +
-                geomLine(color = Color.RED, size = 4.0) {
-                    data.keys.run {
-                        x = range.label
-                        y = secondTitle
-                    }
-                } +
-                geomLine(color = Color.BLUE, size = 2.0) {
-                    data.keys.run {
-                        x = range.label
-                        y = thirdTitle
-                    }
-                } +
-                ggtitle(title),
-        title.png
-    )
-}
-
-fun plotHeat(matrix: Array<Array<Complex>>, title: String) {
-    println(title)
-    println("Absolutes:" + matrix.map { it.absolutes() })
-    println("Args" + matrix.map { it.args() })
-}
-
-val String.png: String
-    get() = this + EXT

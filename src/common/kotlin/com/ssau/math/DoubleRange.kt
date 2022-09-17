@@ -1,4 +1,4 @@
-package lab1
+package com.ssau.math
 
 import kotlin.math.roundToInt
 
