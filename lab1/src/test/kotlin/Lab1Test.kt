@@ -14,13 +14,13 @@ private const val q = 25.0
 private const val n = 1000
 private const val m = 1000
 
-val f = { x: Double -> ComplexField.exp(ComplexField.i * beta * x) }
-
-val kor = { ksi: Double, x: Double ->
-    ComplexField.i * exp(-alpha * (x - ksi).pow(2))
-} // Fomin: variant 12
-
 internal class Lab1Test {
+
+    private val f = { x: Double -> ComplexField.exp(ComplexField.i * beta * x) }
+
+    private val kor = { ksi: Double, x: Double ->
+        ComplexField.i * exp(-alpha * (x - ksi).pow(2))
+    } // Fomin: variant 12
 
     @Test
     fun task1() {
@@ -62,9 +62,9 @@ internal class Lab1Test {
         listOf(c, 1.0, 100.0).forEach { plotTransformToFileDefault(c1 = it) }
     }
 
+    private fun plotTransformToFileDefault(a: Double = alpha, p1: Double = p, q1: Double = q, c1: Double = c) =
+        plotTransformToFile(a, p1, q1, c1, n, m, f, kor)
+
+    private fun plotDefaultFToFileDefault(b: Double) = plotDefaultFToFile(b, c, n, f)
+
 }
-
-private fun plotTransformToFileDefault(a: Double = alpha, p1: Double = p, q1: Double = q, c1: Double = c) =
-    plotTransformToFile(a, p1, q1, c1, n, m, f, kor)
-
-private fun plotDefaultFToFileDefault(b: Double) = plotDefaultFToFile(b, c, n, f)
