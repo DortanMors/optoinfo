@@ -1,10 +1,11 @@
-package com.ssau.optoinformatic.plot
+package com.ssau.optoinformatic.lab1.plot
 
-import com.ssau.optoinformatic.math.*
-import com.ssau.optoinformatic.plot.Constants.FX_LABEL
-import com.ssau.optoinformatic.plot.Constants.F_KSI_LABEL
-import com.ssau.optoinformatic.plot.Constants.KSI_LABEL
-import com.ssau.optoinformatic.plot.Constants.X_LABEL
+import com.ssau.optoinformatic.common.math.*
+import com.ssau.optoinformatic.common.plot.Constants.FX_LABEL
+import com.ssau.optoinformatic.common.plot.Constants.F_KSI_LABEL
+import com.ssau.optoinformatic.common.plot.Constants.KSI_LABEL
+import com.ssau.optoinformatic.common.plot.Constants.X_LABEL
+import com.ssau.optoinformatic.common.plot.plotOnRange
 import space.kscience.kmath.complex.Complex
 
 fun plotTransformToFile(

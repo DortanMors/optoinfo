@@ -1,14 +1,18 @@
+import com.ssau.optoinformatic.common.math.DoubleRange
+import com.ssau.optoinformatic.common.math.absolutes
+import com.ssau.optoinformatic.common.math.args
+import com.ssau.optoinformatic.common.math.invoke
 import org.junit.jupiter.api.Test
 
-import com.ssau.optoinformatic.math.*
-import com.ssau.optoinformatic.plot.Constants.F_KSI_LABEL
-import com.ssau.optoinformatic.plot.Constants.KSI_LABEL
-import com.ssau.optoinformatic.plot.Constants.X_LABEL
-import com.ssau.optoinformatic.plot.Constants.Y_LABEL
-import com.ssau.optoinformatic.plot.plotHeat
-import com.ssau.optoinformatic.plot.plotToFile
-import com.ssau.optoinformatic.plot.threePlots
-import com.ssau.optoinformatic.plot.twoPlots
+import com.ssau.optoinformatic.lab2.math.*
+import com.ssau.optoinformatic.common.plot.Constants.F_KSI_LABEL
+import com.ssau.optoinformatic.common.plot.Constants.KSI_LABEL
+import com.ssau.optoinformatic.common.plot.Constants.X_LABEL
+import com.ssau.optoinformatic.common.plot.Constants.Y_LABEL
+import com.ssau.optoinformatic.lab2.plot.plotHeat
+import com.ssau.optoinformatic.lab2.plot.plotToFile
+import com.ssau.optoinformatic.lab2.plot.threePlots
+import com.ssau.optoinformatic.lab2.plot.twoPlots
 import org.junit.jupiter.api.BeforeEach
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField.i
@@ -131,6 +135,7 @@ internal class Lab2Test {
     fun task9_2() {
         val gaussValues = gauss2F(xs, ys)
         plotHeat(gaussValues, "gauss 2 values") //TODO
+        
     }
 
     @Test

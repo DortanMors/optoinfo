@@ -1,4 +1,4 @@
-package com.ssau.optoinformatic.math
+package com.ssau.optoinformatic.common.math
 
 import org.jetbrains.letsPlot.geom.geomLine
 import org.jetbrains.letsPlot.label.ggtitle

@@ -1,12 +1,20 @@
-package com.ssau.optoinformatic.plot
+package com.ssau.optoinformatic.lab2.plot
 
-import com.ssau.optoinformatic.math.DoubleRange
-import com.ssau.optoinformatic.math.SampledArea
-import com.ssau.optoinformatic.math.absolutes
-import com.ssau.optoinformatic.math.args
+import com.ssau.optoinformatic.common.math.DoubleRange
+import com.ssau.optoinformatic.lab2.math.SampledArea
+import com.ssau.optoinformatic.common.math.absolutes
+import com.ssau.optoinformatic.common.math.args
+import com.ssau.optoinformatic.common.plot.plotOnRange
+import com.ssau.optoinformatic.common.plot.png
 import jetbrains.datalore.base.values.Color
+import org.jetbrains.letsPlot.coord.coordFixed
 import org.jetbrains.letsPlot.export.ggsave
 import org.jetbrains.letsPlot.geom.geomLine
+import org.jetbrains.letsPlot.geom.geomPolygon
+import org.jetbrains.letsPlot.ggplot
+import org.jetbrains.letsPlot.ggsize
+import org.jetbrains.letsPlot.intern.StatKind
+import org.jetbrains.letsPlot.intern.layer.StatOptions
 import org.jetbrains.letsPlot.label.ggtitle
 import org.jetbrains.letsPlot.letsPlot
 import space.kscience.kmath.complex.Complex
@@ -78,9 +86,19 @@ fun threePlots(
 }
 
 fun plotHeat(matrix: Array<Array<Complex>>, title: String) {
+    val listRe = matrix.flatMap { array -> array.map { complex -> complex.re } }
+    val listIm = matrix.flatMap { array -> array.map { complex -> complex.im } }
+    ggsave(
+        plot = ggplot(mapOf("re" to listRe, "im" to listIm)) { x = "re"; y = "im" }
+               + ggsize(600,300)
+               + geomPolygon(stat=StatOptions(StatKind.DENSITY2D)) { fill="..level.." }
+               + coordFixed(),
+        filename = title.png
+    )
+    //+scale_fill_gradient(low='#49006a', high='#fff7f3')
     println(title)
-    println("Absolutes:" + matrix.map { it.absolutes() })
-    println("Args" + matrix.map { it.args() })
+//    println("Absolutes:" + matrix.map { it.absolutes() })
+//    println("Args" + matrix.map { it.args() })
 }
 
 fun plotToFile(area: SampledArea, fLabel: String, title: String) {

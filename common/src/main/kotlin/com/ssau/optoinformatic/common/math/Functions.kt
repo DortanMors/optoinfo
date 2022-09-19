@@ -1,4 +1,4 @@
-package com.ssau.optoinformatic.math
+package com.ssau.optoinformatic.common.math
 
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.r

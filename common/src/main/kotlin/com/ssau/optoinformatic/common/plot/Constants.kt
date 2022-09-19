@@ -1,4 +1,4 @@
-package com.ssau.optoinformatic.plot
+package com.ssau.optoinformatic.common.plot
 
 object Constants {
     const val X_LABEL = "x"

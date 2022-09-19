@@ -1,6 +1,9 @@
-package com.ssau.optoinformatic.math
+package com.ssau.optoinformatic.lab2.math
 
-import com.ssau.optoinformatic.plot.Constants.KSI_LABEL
+import com.ssau.optoinformatic.common.math.DoubleRange
+import com.ssau.optoinformatic.common.math.integralTransform
+import com.ssau.optoinformatic.common.math.integrate
+import com.ssau.optoinformatic.common.plot.Constants.KSI_LABEL
 import jetbrains.datalore.base.math.ipow
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField

@@ -1,5 +1,5 @@
-import com.ssau.optoinformatic.plot.plotDefaultFToFile
-import com.ssau.optoinformatic.plot.plotTransformToFile
+import com.ssau.optoinformatic.lab1.plot.plotDefaultFToFile
+import com.ssau.optoinformatic.lab1.plot.plotTransformToFile
 import org.junit.jupiter.api.Test
 import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.complex.ComplexField.times

@@ -1,8 +1,8 @@
-package com.ssau.optoinformatic.plot
+package com.ssau.optoinformatic.common.plot
 
-import com.ssau.optoinformatic.math.DoubleRange
-import com.ssau.optoinformatic.math.plot
-import com.ssau.optoinformatic.plot.Constants.EXT
+import com.ssau.optoinformatic.common.math.DoubleRange
+import com.ssau.optoinformatic.common.math.plot
+import com.ssau.optoinformatic.common.plot.Constants.EXT
 import org.jetbrains.letsPlot.export.ggsave
 
 fun plotOnRange(xData: DoubleRange, yData: List<Double>, yLabel: String, title: String) =

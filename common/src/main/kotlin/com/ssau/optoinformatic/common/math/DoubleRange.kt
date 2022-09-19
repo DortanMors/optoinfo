@@ -1,4 +1,4 @@
-package com.ssau.optoinformatic.math
+package com.ssau.optoinformatic.common.math
 
 import java.util.*
 import kotlin.math.roundToInt
