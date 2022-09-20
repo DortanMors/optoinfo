@@ -21,12 +21,6 @@ import kotlin.math.sin
 
 data class SampledArea (val numbers: Array<Complex>, val range: DoubleRange) {
 
-    init {
-        require(range.n == numbers.size) {
-            "wrong SampledArea: expected size = ${range.n}, received ${numbers.size}"
-        }
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -120,7 +114,7 @@ fun SampledArea.scaledFiniteFourierTransform(m: Int): SampledArea {
     val scaledSamples = SampledArea(numbers.inflateZeros(m), range)
     val result = scaledSamples.finiteFourierTransform() // b = N^2 / 4aM   =>    hu = 1 / (hx M)
     val b = numbers.size.ipow(2) / (4 * m * range.right)
-    val hu = 1 / (range.step * m) //todo question check hu == outRange.step
+    val hu = 1 / (range.step * m)
     val outRange = DoubleRange(-b, b, numbers.size, KSI_LABEL)
     return SampledArea(result.clipZeros(numbers.size), outRange)
 }

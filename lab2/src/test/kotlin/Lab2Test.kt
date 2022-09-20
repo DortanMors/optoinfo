@@ -148,9 +148,9 @@ internal class Lab2Test {
         val gaussValues = gauss2F(xs, ys)
         val gaussTransform = gaussValues.scaledFiniteFourierTransform(m = m)
         plotHeat(
-            matrix = gaussValues.numbers.absolutes(),
-            xRange = gaussValues.rangeX,
-            yRange = gaussValues.rangeY,
+            matrix = gaussTransform.numbers.absolutes(),
+            xRange = gaussTransform.rangeX,
+            yRange = gaussTransform.rangeY,
             zTitle = "transformed gauss",
             title = "gauss 2 transform",
         )
