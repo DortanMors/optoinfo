@@ -4,6 +4,7 @@ import com.ssau.optoinformatic.common.math.DoubleRange
 import com.ssau.optoinformatic.common.math.integralTransform
 import com.ssau.optoinformatic.common.math.integrate
 import com.ssau.optoinformatic.common.plot.Constants.KSI_LABEL
+import com.ssau.optoinformatic.common.plot.Constants.U_LABEL
 import jetbrains.datalore.base.math.ipow
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
@@ -19,6 +20,13 @@ import kotlin.math.log2
 import kotlin.math.sin
 
 data class SampledArea (val numbers: Array<Complex>, val range: DoubleRange) {
+
+    init {
+        require(range.n == numbers.size) {
+            "wrong SampledArea: expected size = ${range.n}, received ${numbers.size}"
+        }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -37,21 +45,58 @@ data class SampledArea (val numbers: Array<Complex>, val range: DoubleRange) {
     }
 }
 
+data class SampledSquare (val numbers: Array<Array<Complex>>, val rangeX: DoubleRange, val rangeY: DoubleRange) {
+
+    init {
+        require(rangeX.n == numbers.firstOrNull()?.size && rangeY.n == numbers.size) {
+            "wrong SampledSquare: expected size = [${rangeX.n} x ${rangeY.n}], received [${numbers.firstOrNull()?.size} x ${numbers.size}]"
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as SampledSquare
+        if (!numbers.contentEquals(other.numbers)) return false
+        if (rangeX != other.rangeX) return false
+        if (rangeX.step != rangeX.step) return false
+        if (rangeY != other.rangeY) return false
+        if (rangeY.step != rangeY.step) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = numbers.contentHashCode()
+        result = 31 * result + rangeX.hashCode()
+        result = 31 * result + rangeX.step.hashCode()
+        result = 31 * result + rangeY.hashCode()
+        result = 31 * result + rangeY.step.hashCode()
+        return result
+    }
+}
+
 val fourierKor: (Double, Double) -> Complex = { ksi, x -> exp(-2 * PI * i * ksi * x) }
 
 fun ((Double) -> Complex).rectFourierTransform(ksiRange: DoubleRange, xRange: DoubleRange): Array<Complex> =
     integralTransform(ksiRange, xRange, fourierKor).toTypedArray()
 
 // Task 9
-fun fastFourierTransform(matrix: Array<Array<Complex>>): Array<Array<Complex>> {
-    val transformedByRow = Array(matrix.size) { row ->
-        fastFourierTransform(matrix[row])
+fun SampledSquare.scaledFiniteFourierTransform(m: Int): SampledSquare {
+    require(rangeX.right + rangeX.left == 0.0 && rangeY.right + rangeY.left == 0.0) {
+        "2d FFT: not centered input area"
+    }
+    val transformedByRow = Array(numbers.size) { row ->
+        SampledArea(numbers[row], rangeX).scaledFiniteFourierTransform(m).numbers
     }
     val transposed = transformedByRow.transpose()
     val transformedByColumn = Array(transposed.size) { column ->
-        fastFourierTransform(transposed[column])
+        SampledArea(numbers[column], rangeY).scaledFiniteFourierTransform(m).numbers
     }
-    return transformedByColumn.transpose()
+    val bKsi = rangeX.n * rangeX.n / (4 * rangeX.right * m)
+    val rangeKsi = DoubleRange(-bKsi, bKsi, rangeX.n, KSI_LABEL)
+    val bU = rangeY.n * rangeY.n / (4 * rangeY.right * m)
+    val rangeU = DoubleRange(-bU, bU, rangeY.n, U_LABEL)
+    return SampledSquare(transformedByColumn.transpose(), rangeKsi, rangeU)
 }
 
 // Task9
@@ -71,11 +116,11 @@ fun ((Double, Double) -> Complex).rectFourierTransform(
     }
 
 fun SampledArea.scaledFiniteFourierTransform(m: Int): SampledArea {
-    require(numbers.size % 2 == 0) { "Can`t inflate zeros" }
+    require(m % 2 == 0) { "Can`t inflate zeros" }
     val scaledSamples = SampledArea(numbers.inflateZeros(m), range)
     val result = scaledSamples.finiteFourierTransform() // b = N^2 / 4aM   =>    hu = 1 / (hx M)
     val b = numbers.size.ipow(2) / (4 * m * range.right)
-    val hu = 1 / (range.step * m) //todo question
+    val hu = 1 / (range.step * m) //todo question check hu == outRange.step
     val outRange = DoubleRange(-b, b, numbers.size, KSI_LABEL)
     return SampledArea(result.clipZeros(numbers.size), outRange)
 }
@@ -89,7 +134,7 @@ fun SampledArea.finiteFourierTransform(): Array<Complex> {
     return result
 }
 
-fun fastFourierTransform(x: Array<Complex>): Array<Complex> {
+private fun fastFourierTransform(x: Array<Complex>): Array<Complex> {
     val n = x.size
     if (n == 1) return arrayOf(x[0])
     // compute FFT of even terms
