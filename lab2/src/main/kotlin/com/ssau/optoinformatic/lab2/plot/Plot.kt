@@ -7,17 +7,13 @@ import com.ssau.optoinformatic.common.math.args
 import com.ssau.optoinformatic.common.plot.plotOnRange
 import com.ssau.optoinformatic.common.plot.png
 import jetbrains.datalore.base.values.Color
-import org.jetbrains.letsPlot.coord.coordFixed
 import org.jetbrains.letsPlot.export.ggsave
 import org.jetbrains.letsPlot.geom.geomLine
-import org.jetbrains.letsPlot.geom.geomPolygon
+import org.jetbrains.letsPlot.geom.geomTile
 import org.jetbrains.letsPlot.ggplot
-import org.jetbrains.letsPlot.ggsize
-import org.jetbrains.letsPlot.intern.StatKind
-import org.jetbrains.letsPlot.intern.layer.StatOptions
 import org.jetbrains.letsPlot.label.ggtitle
 import org.jetbrains.letsPlot.letsPlot
-import space.kscience.kmath.complex.Complex
+import org.jetbrains.letsPlot.scale.scaleFillGradient2
 
 fun twoPlots(title: String, range: DoubleRange, firstArea: List<Double>, secondArea: List<Double>, firstAreaTitle: String, secondAreaTitle: String) {
     val data = mutableMapOf<String, Any>(
@@ -85,20 +81,19 @@ fun threePlots(
     )
 }
 
-fun plotHeat(matrix: Array<Array<Complex>>, title: String) {
-    val listRe = matrix.flatMap { array -> array.map { complex -> complex.re } }
-    val listIm = matrix.flatMap { array -> array.map { complex -> complex.im } }
+fun plotHeat(matrix: List<List<Double>>, xRange: DoubleRange, yRange: DoubleRange, zTitle: String, title: String) {
+    val zFlatten = matrix.flatten()
+    val yFlatten = xRange.flatMap { yRange }
+    val xFlatten = xRange.flatMap { x -> Array(yRange.size) { x }.asList() }
+
     ggsave(
-        plot = ggplot(mapOf("re" to listRe, "im" to listIm)) { x = "re"; y = "im" }
-               + ggsize(600,300)
-               + geomPolygon(stat=StatOptions(StatKind.DENSITY2D)) { fill="..level.." }
-               + coordFixed(),
+        plot = ggplot(mapOf(xRange.label to xFlatten, yRange.label to yFlatten, zTitle to zFlatten))
+               + geomTile { x = xRange.label; y = yRange.label; fill=zTitle }
+               + scaleFillGradient2(low = "green", mid = "blue", high = "red")
+        ,
         filename = title.png
     )
-    //+scale_fill_gradient(low='#49006a', high='#fff7f3')
     println(title)
-//    println("Absolutes:" + matrix.map { it.absolutes() })
-//    println("Args" + matrix.map { it.args() })
 }
 
 fun plotToFile(area: SampledArea, fLabel: String, title: String) {

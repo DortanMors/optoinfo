@@ -19,12 +19,6 @@ fun ((Double) -> Complex).integralTransform(ksiRange: DoubleRange, xRange: Doubl
 fun ((Double) -> Complex).integral2Transform(ksiRange: DoubleRange, xRange: DoubleRange, kor: (Double, Double) -> Complex) =
     ksiRange.map { ksi -> integralTransform(ksi, xRange, kor) }
 
-fun range(left: Double, right: Double, n: Int) = ((right - left) / n).let { h ->
-    (0 until n ).map { k ->
-        left + k * h
-    }
-}
-
 fun plot(data: Map<*, *>, title: String, color: String = "dark-green", size: Double = 1.0) =
     letsPlot(data) +
     geomLine(color = color, size = size) {
@@ -34,10 +28,3 @@ fun plot(data: Map<*, *>, title: String, color: String = "dark-green", size: Dou
         }
     } +
     ggtitle(title)
-
-operator fun ((Double, Double) -> Complex).invoke(xRange: DoubleRange, yRange: DoubleRange) =
-    Array(xRange.n) { xi ->
-        Array(yRange.n) { yi ->
-            invoke(xRange[xi], yRange[yi])
-        }
-    }

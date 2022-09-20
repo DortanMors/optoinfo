@@ -134,23 +134,46 @@ internal class Lab2Test {
     @Test
     fun task9_2() {
         val gaussValues = gauss2F(xs, ys)
-        plotHeat(gaussValues, "gauss 2 values") //TODO
-        
+        plotHeat(
+            matrix = gaussValues.numbers.absolutes(),
+            xRange = gaussValues.rangeX,
+            yRange = gaussValues.rangeY,
+            zTitle = "gauss beam",
+            title = "gauss 2 values",
+        )
     }
 
     @Test
     fun task9_3() {
         val gaussValues = gauss2F(xs, ys)
-        val gaussTransform = fastFourierTransform(gaussValues)
-        plotHeat(gaussTransform, "gauss 2 transform") //TODO
+        val gaussTransform = gaussValues.scaledFiniteFourierTransform(m = m)
+        plotHeat(
+            matrix = gaussValues.numbers.absolutes(),
+            xRange = gaussValues.rangeX,
+            yRange = gaussValues.rangeY,
+            zTitle = "transformed gauss",
+            title = "gauss 2 transform",
+        )
     }
 
     @Test
     fun task9_6() {
         val variantValues = inputF2(xs, ys)
-        plotHeat(variantValues, "variant 2 values")
-        val variantTransformed = fastFourierTransform(variantValues)
-        plotHeat(variantValues, "variant 2 transform")
+        plotHeat(
+            matrix = variantValues.numbers.absolutes(),
+            xRange = variantValues.rangeX,
+            yRange = variantValues.rangeY,
+            zTitle = "variant values",
+            title = "variant 2 values",
+        )
+        val variantTransformed = variantValues.scaledFiniteFourierTransform(m = m)
+        plotHeat(
+            matrix = variantTransformed.numbers.absolutes(),
+            xRange = variantTransformed.rangeX,
+            yRange = variantTransformed.rangeY,
+            zTitle = "variant transformed",
+            title = "variant 2 transform",
+        )
     }
 
     private fun doTask8(n: Int, m: Int) {
