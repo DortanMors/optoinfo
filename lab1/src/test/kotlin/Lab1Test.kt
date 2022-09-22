@@ -6,8 +6,8 @@ import space.kscience.kmath.complex.ComplexField.times
 import kotlin.math.exp
 import kotlin.math.pow
 
-private const val beta = 0.1
-private const val alpha = 1.0
+private var beta = 0.1
+private var alpha = 1.0
 private const val c = 5.0
 private const val p = -25.0
 private const val q = 25.0
@@ -24,15 +24,17 @@ internal class Lab1Test {
 
     @Test
     fun task1() {
-        // Построить график исходного оптического сигнала, изменяя параметр
-        listOf(0.1, 100.0, 0.001, -0.1, -0.001).forEach(::plotDefaultFToFileDefault)
+        // Построить график исходного оптического сигнала, изменяя параметр beta
+        listOf(0.1, 100.0, 0.001, -0.1, -0.001).forEach { newB ->
+            plotDefaultFToFileDefault(newB)
+        }
     }
 
     @Test
     fun task2() {
         // В соответствии с вариантом реализовать численный расчёт
         // интегрального преобразования над одномерным сигналом по формулам (7) или (10),
-        //везде alpha принять равным 1. Число m можно также задать равным 1000.
+        // везде alpha принять равным 1. Число m можно также задать равным 1000.
         plotTransformToFileDefault(p1 = p, q1 =q)
     }
 
@@ -50,7 +52,9 @@ internal class Lab1Test {
         // (по аналогии с beta, но рассматривая только положительные значения)
         // исследовать, как меняется результат преобразования.
         // Важно: для того, чтобы сделать вывод, может понадобиться изменить размеры выходной области [p , q]
-        listOf(0.1, 100.0, 0.001).forEach { plotTransformToFileDefault(a = it) }
+        listOf(0.1, 100.0, 0.001).forEach {  newAlpha ->
+            plotTransformToFileDefault(a = newAlpha)
+        }
     }
 
     @Test
@@ -58,13 +62,25 @@ internal class Lab1Test {
         // Варьируя параметр c > 0 и, следовательно, изменяя область интегрирования,
         // исследовать, как меняются график исходной функции и результат преобразования.
         // Важно: для того, чтобы
-        //сделать вывод, может понадобиться изменить размеры выходной области [p , q].
+        // сделать вывод, может понадобиться изменить размеры выходной области [p , q].
         listOf(c, 1.0, 100.0).forEach { plotTransformToFileDefault(c1 = it) }
     }
 
-    private fun plotTransformToFileDefault(a: Double = alpha, p1: Double = p, q1: Double = q, c1: Double = c) =
-        plotTransformToFile(a, p1, q1, c1, n, m, f, kor)
+    private fun plotTransformToFileDefault(a: Double = alpha, p1: Double = p, q1: Double = q, c1: Double = c) {
+        alpha.let { prevAlpha ->
+            alpha = a
+            plotTransformToFile(a, p1, q1, c1, n, m, f, kor)
+            alpha = prevAlpha
+        }
+    }
 
-    private fun plotDefaultFToFileDefault(b: Double) = plotDefaultFToFile(b, c, n, f)
+
+    private fun plotDefaultFToFileDefault(b: Double) {
+        beta.let { prevValue ->
+            beta = b
+            plotDefaultFToFile(b, c, n, f)
+            beta = prevValue
+        }
+    }
 
 }

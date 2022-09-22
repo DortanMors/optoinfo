@@ -13,7 +13,6 @@ import com.ssau.optoinformatic.lab2.plot.plotHeat
 import com.ssau.optoinformatic.lab2.plot.plotToFile
 import com.ssau.optoinformatic.lab2.plot.threePlots
 import com.ssau.optoinformatic.lab2.plot.twoPlots
-import org.junit.jupiter.api.BeforeEach
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField.i
 import space.kscience.kmath.complex.ComplexField.plus
@@ -40,11 +39,6 @@ internal class Lab2Test {
     private val fourierArea = area.scaledFiniteFourierTransform(m)
     private val xs = DoubleRange(-c, c, n, X_LABEL)
     private val ys = DoubleRange(-c, c, n, Y_LABEL)
-
-    @BeforeEach
-    fun setupTest() {
-
-    }
 
     @Test
     fun task2() {
