@@ -24,13 +24,13 @@ fun plotTransformToFile(
             xData = ksiRange,
             yData = args(),
             yLabel = "Arg($F_KSI_LABEL",
-            title = "Args of f transform (α = $a, p = $p1, q = $q1)",
+            title = "Args of f transform (c = $c1, p = $p1, q = $q1)",
         )
         plotOnRange(
             xData = ksiRange,
             yData = absolutes(),
             yLabel = "|$F_KSI_LABEL",
-            title = "Absolutes of f transform (α = $a, p = $p1, q = $q1)",
+            title = "Absolutes of f transform (c = $c1, p = $p1, q = $q1)",
         )
     }
 }

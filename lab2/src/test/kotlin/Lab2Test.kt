@@ -86,6 +86,7 @@ internal class Lab2Test {
     @Test
     fun task6() {
         val area6 = SampledArea(inputF(xRange), xRange)
+        plotToFile(area6, "exp(-|$X_LABEL|)", "gauss beam (Task6)")
         val fourierArea6 = area6.scaledFiniteFourierTransform(m)
         plotToFile(fourierArea6, "$F_KSI_LABEL[exp(-|$X_LABEL|)]", "fourier gauss beam (Task6)")
     }
@@ -121,6 +122,7 @@ internal class Lab2Test {
             64 to 64,
             128 to 128,
             128 to 512,
+            128 to 1024,
             128 to 2048,
         ).forEach { doTask8(n = it.first, m = it.second) }
     }
@@ -135,6 +137,13 @@ internal class Lab2Test {
             zTitle = "gauss beam",
             title = "gauss 2 values",
         )
+        plotHeat(
+            matrix = gaussValues.numbers.args(),
+            xRange = gaussValues.rangeX,
+            yRange = gaussValues.rangeY,
+            zTitle = "gauss beam",
+            title = "gauss 2 values args",
+        )
     }
 
     @Test
@@ -148,6 +157,13 @@ internal class Lab2Test {
             zTitle = "transformed gauss",
             title = "gauss 2 transform",
         )
+        plotHeat(
+            matrix = gaussTransform.numbers.args(),
+            xRange = gaussTransform.rangeX,
+            yRange = gaussTransform.rangeY,
+            zTitle = "transformed gauss",
+            title = "gauss 2 transform args",
+        )
     }
 
     @Test
@@ -160,6 +176,13 @@ internal class Lab2Test {
             zTitle = "variant values",
             title = "variant 2 values",
         )
+        plotHeat(
+            matrix = variantValues.numbers.args(),
+            xRange = variantValues.rangeX,
+            yRange = variantValues.rangeY,
+            zTitle = "variant values",
+            title = "variant 2 values args",
+        )
         val variantTransformed = variantValues.scaledFiniteFourierTransform(m = m)
         plotHeat(
             matrix = variantTransformed.numbers.absolutes(),
@@ -167,6 +190,13 @@ internal class Lab2Test {
             yRange = variantTransformed.rangeY,
             zTitle = "variant transformed",
             title = "variant 2 transform",
+        )
+        plotHeat(
+            matrix = variantTransformed.numbers.args(),
+            xRange = variantTransformed.rangeX,
+            yRange = variantTransformed.rangeY,
+            zTitle = "variant transformed",
+            title = "variant 2 transform args",
         )
     }
 

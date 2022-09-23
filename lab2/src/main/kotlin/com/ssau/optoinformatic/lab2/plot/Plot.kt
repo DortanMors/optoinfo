@@ -97,6 +97,6 @@ fun plotHeat(matrix: List<List<Double>>, xRange: DoubleRange, yRange: DoubleRang
 }
 
 fun plotToFile(area: SampledArea, fLabel: String, title: String) {
-    plotOnRange(area.range, area.numbers.toList().args(), "|$fLabel|", "$title args")
-    plotOnRange(area.range, area.numbers.toList().absolutes(), "Arg $fLabel", "$title absolutes")
+    plotOnRange(area.range, area.numbers.toList().args(), "Arg $fLabel", "$title args")
+    plotOnRange(area.range, area.numbers.toList().absolutes(), "|$fLabel|", "$title absolutes")
 }
