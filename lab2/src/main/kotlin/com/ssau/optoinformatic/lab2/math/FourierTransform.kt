@@ -79,12 +79,12 @@ fun SampledSquare.scaledFiniteFourierTransform(m: Int): SampledSquare {
     require(rangeX.right + rangeX.left == 0.0 && rangeY.right + rangeY.left == 0.0) {
         "2d FFT: not centered input area"
     }
-    val transformedByRow = Array(numbers.size) { row ->
-        SampledArea(numbers[row], rangeX).scaledFiniteFourierTransform(m).numbers
+    val transformedByRow = Array(this.numbers.size) { row ->
+        SampledArea(this.numbers[row], rangeX).scaledFiniteFourierTransform(m).numbers
     }
     val transposed = transformedByRow.transpose()
     val transformedByColumn = Array(transposed.size) { column ->
-        SampledArea(numbers[column], rangeY).scaledFiniteFourierTransform(m).numbers
+        SampledArea(transposed[column], rangeY).scaledFiniteFourierTransform(m).numbers
     }
     val bKsi = rangeX.n * rangeX.n / (4 * rangeX.right * m)
     val rangeKsi = DoubleRange(-bKsi, bKsi, rangeX.n, KSI_LABEL)
