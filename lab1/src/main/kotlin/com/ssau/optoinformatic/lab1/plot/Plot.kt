@@ -20,13 +20,33 @@ fun plotTransformToFile(
 ) {
     val ksiRange = DoubleRange(p1, q1, m, KSI_LABEL)
     f.integralTransform(ksiRange, DoubleRange(-c1, c1, n, X_LABEL), kor).run {
-        plotOnRange(ksiRange, args(), F_KSI_LABEL,"Args of f transform (α = $a, p = $p1, q = $q1)")
-        plotOnRange(ksiRange, absolutes(), F_KSI_LABEL,"Absolutes of f transform (α = $a, p = $p1, q = $q1)")
+        plotOnRange(
+            xData = ksiRange,
+            yData = args(),
+            yLabel = "Arg($F_KSI_LABEL",
+            title = "Args of f transform (α = $a, p = $p1, q = $q1)",
+        )
+        plotOnRange(
+            xData = ksiRange,
+            yData = absolutes(),
+            yLabel = "|$F_KSI_LABEL",
+            title = "Absolutes of f transform (α = $a, p = $p1, q = $q1)",
+        )
     }
 }
 
 fun plotDefaultFToFile(b: Double, c: Double, n: Int, f: (Double) -> Complex) {
     val xRange = DoubleRange(-c, c, n, X_LABEL)
-    plotOnRange(xRange, f(xRange).args(), FX_LABEL, "Args of f default (β = $b)")
-    plotOnRange(xRange, f(xRange).absolutes(), FX_LABEL, "Absolutes of f default (β = $b)")
+    plotOnRange(
+        xData = xRange,
+        yData = f(xRange).args(),
+        yLabel = "Arg($FX_LABEL)",
+        title = "Args of f default (β = $b)",
+    )
+    plotOnRange(
+        xData = xRange,
+        yData = f(xRange).absolutes(),
+        yLabel = "|$FX_LABEL|",
+        title = "Absolutes of f default (β = $b)",
+    )
 }
